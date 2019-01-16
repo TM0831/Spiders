@@ -2,9 +2,9 @@
 Version: Python3.5
 Author: OniOn
 Site: http://www.cnblogs.com/TM0831/
-Time: 2019/1/9 16:23
+Time: 2019/1/14 16:23
 """
-# import aiohttp
+import aiohttp
 import asyncio
 from lxml import etree
 import pymongo
@@ -15,31 +15,31 @@ db = pymongo.MongoClient(host="127.0.0.1", port=27017)
 col = db['Spider']['JingMi']
 
 
-# async def get(url):
-#     session = aiohttp.ClientSession()
-#     response = await session.get(url)
-#     text = await response.text()
-#     session.close()
-#     return text
-#
-#
-# async def parse(url):
-#     html = await get(url)
-#     s = etree.HTML(html)
-#     titles = s.xpath('/html/body/section/div[2]/div/article/header/h2/a/@title')
-#     urls = s.xpath('/html/body/section/div[2]/div/article/header/h2/a/@href')
-#     eyes = s.xpath('/html/body/section/div[2]/div/article/p/span[3]/text()')
-#     comments = s.xpath('/html/body/section/div[2]/div/article/p/span[4]/a/text()')
-#     likes = s.xpath('/html/body/section/div[2]/div/article/p/span[5]/a/span/text()')
-#     for title, url, eye, comment, like in zip(titles, urls, eyes, comments, likes):
-#         info = {
-#             "标题": title,
-#             "链接": url,
-#             "浏览数": eye.rstrip("浏览"),
-#             "评论数": comment.rstrip("评论"),
-#             "喜欢数": like
-#         }
-#         info_list.append(info)
+async def get(url):
+    session = aiohttp.ClientSession()
+    response = await session.get(url)
+    text = await response.text()
+    session.close()
+    return text
+
+
+async def parse(url):
+    html = await get(url)
+    s = etree.HTML(html)
+    titles = s.xpath('/html/body/section/div[2]/div/article/header/h2/a/@title')
+    urls = s.xpath('/html/body/section/div[2]/div/article/header/h2/a/@href')
+    eyes = s.xpath('/html/body/section/div[2]/div/article/p/span[3]/text()')
+    comments = s.xpath('/html/body/section/div[2]/div/article/p/span[4]/a/text()')
+    likes = s.xpath('/html/body/section/div[2]/div/article/p/span[5]/a/span/text()')
+    for title, url, eye, comment, like in zip(titles, urls, eyes, comments, likes):
+        info = {
+            "标题": title,
+            "链接": url,
+            "浏览数": eye.rstrip("浏览"),
+            "评论数": comment.rstrip("评论"),
+            "喜欢数": like
+        }
+        info_list.append(info)
 
 
 def plot(title, name, index_list, value_list):
@@ -61,11 +61,11 @@ def analyze():
 
 
 def main():
-    # urls = ["https://cuiqingcai.com/page/{}".format(i) for i in (1, 36)]
-    # tasks = [asyncio.ensure_future(parse(url)) for url in urls]
-    # loop = asyncio.get_event_loop()
-    # loop.run_until_complete(asyncio.wait(tasks))
-    # col.insert(info_list)
+    urls = ["https://cuiqingcai.com/page/{}".format(i) for i in (1, 36)]
+    tasks = [asyncio.ensure_future(parse(url)) for url in urls]
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(asyncio.wait(tasks))
+    col.insert(info_list)
     analyze()
 
 
