@@ -19,7 +19,7 @@ async def get(url):
     session = aiohttp.ClientSession()
     response = await session.get(url)
     text = await response.text()
-    session.close()
+    await session.close()
     return text
 
 
