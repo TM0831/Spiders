@@ -21,7 +21,7 @@ class Main:
         :return:
         """
         self.gp.get_proxy()
-        self.tp.test()
+        self.tp.main()
         proxy = self.db.random()
         proxy = proxy.decode('utf-8')
         print("从代理池中取出的代理为：{}".format(proxy))
