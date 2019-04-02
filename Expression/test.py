@@ -28,7 +28,7 @@ class Producer(threading.Thread):
 
     def run(self):
         """
-        若队列不为空则获取url，若两个队列都为空则退出
+        若队列不为空则获取url，若两个队列都为空则退出程序
         :return:
         """
         while True:
