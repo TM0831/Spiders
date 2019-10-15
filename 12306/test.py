@@ -24,9 +24,7 @@ class TrainUser:
 
     # 登录12306
     def login(self):
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--headless')
-        browser = webdriver.Chrome(chrome_options=chrome_options)
+       browser = webdriver.Chrome()
         browser.get("https://kyfw.12306.cn/otn/login/init")
         browser.find_element_by_xpath('//*[@id="username"]').send_keys(self.username)
         sleep(2)
@@ -37,7 +35,7 @@ class TrainUser:
         size = captcha_img.size
         # 写成我们需要截取的位置坐标
         coordinates = (int(location['x']), int(location['y']),
-                       int(location['x'] + size['width']), int(location['y'] + size['height']))
+                       int(location['x'] + 2 * size['width']), int(location['y'] + 2 * size['height']))
         browser.save_screenshot('screen.png')
         i = Image.open('screen.png')
         # 使用Image的crop函数，从截图中再次截取我们需要的区域
@@ -52,16 +50,17 @@ class TrainUser:
         for point in points:
             # 先定位到验证图片
             element = WebDriverWait(browser, 20).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "touclick-bgimg")))
+                EC.presence_of_element_located((By.CLASS_NAME, "touclick-image")))
             # 模拟点击验证图片
-            ActionChains(browser).move_to_element_with_offset(element, point[0], point[1]).click().perform()
-            sleep(1)
+            ActionChains(browser).move_to_element_with_offset(element, point[0] - 110, point[1] - 90).click().perform()
+            sleep(3)
         browser.find_element_by_xpath('//*[@id="loginSub"]').click()
-        cookie = json.dumps(browser.get_cookies())
-        cookie_list = [item['name'] + "=" + item['value'] for item in json.loads(cookie)]
-        cookie_str = ';'.join(item for item in cookie_list)
-        self.cookie = cookie_str
-        print(self.cookie + "\n您已登录成功！")
+        sleep(5)
+        if browser.current_url not in ["https://kyfw.12306.cn/otn/login/init", "https://kyfw.12306.cn/otn/login/init#"]:
+            print("登录成功！")
+        else:
+            print("登录失败，请重试！")
+
 
     # 显示可购车票信息
     def show_ticket(self):
