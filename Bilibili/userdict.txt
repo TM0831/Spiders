@@ -2,7 +2,7 @@ langx
 karsa
 xiaohu
 uzi
-xiaoming
+ming
 khan
 clid
 faker
