@@ -33,6 +33,8 @@
 主要破解了猫眼电影的字符集反爬.
 * ProxyPool--IP代理池  
 爬取网上的免费IP代理，然后使用Redis数据库搭建代理池，使用异步协程检测代理可用性.
+* QiMingPian--企名片爬虫  
+调用PyExecJS库使用JS解密企名片网站的加密数据.
 * RedisCrawler--Redis分布式爬虫  
 使用Redis数据库和requests库开发的分布式爬虫，并使用多进程爬取和下载图片.
 * TianYa--天涯图片爬虫  
